@@ -12,15 +12,28 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+// Type definition for sort options
 type SortOption = "price-asc" | "price-desc" | "name-asc" | "name-desc";
 
+/**
+ * Marketplace Component
+ * Main page for displaying products categorized by vegetables and fruits
+ * Features sorting options and dynamic content loading
+ */
 export default function Marketplace() {
+  // State for sorting products
   const [sortBy, setSortBy] = useState<SortOption>("price-asc");
 
+  // Fetch products from API
   const { data: products = [], isLoading } = useQuery<Product[]>({
     queryKey: ["/api/products"],
   });
 
+  /**
+   * Sort products based on selected criteria
+   * @param productsToSort - Array of products to sort
+   * @returns Sorted array of products
+   */
   const sortProducts = (productsToSort: Product[]) => {
     return [...productsToSort].sort((a, b) => {
       switch (sortBy) {
@@ -38,11 +51,13 @@ export default function Marketplace() {
     });
   };
 
+  // Filter and sort products by category
   const vegetables = sortProducts(products.filter(p => p.category === "vegetables"));
   const fruits = sortProducts(products.filter(p => p.category === "fruits"));
 
   return (
     <div className="container py-16">
+      {/* Header Section */}
       <div className="text-center mb-8">
         <h1 className="text-4xl font-bold mb-4">Marketplace</h1>
         <p className="text-gray-600 max-w-2xl mx-auto">
@@ -51,6 +66,7 @@ export default function Marketplace() {
         </p>
       </div>
 
+      {/* Sort Controls */}
       <div className="flex justify-end mb-8">
         <Select value={sortBy} onValueChange={(value) => setSortBy(value as SortOption)}>
           <SelectTrigger className="w-[200px]">
@@ -65,14 +81,18 @@ export default function Marketplace() {
         </Select>
       </div>
 
+      {/* Product Display */}
       {isLoading ? (
+        // Loading state with skeletons
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[...Array(6)].map((_, i) => (
             <Skeleton key={i} className="h-[500px] w-full" />
           ))}
         </div>
       ) : (
+        // Categorized product display
         <div className="space-y-16">
+          {/* Vegetables Section */}
           <section>
             <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
               <span className="text-3xl">🥬</span> Fresh Vegetables
@@ -84,6 +104,7 @@ export default function Marketplace() {
             </div>
           </section>
 
+          {/* Fruits Section */}
           <section>
             <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
               <span className="text-3xl">🍎</span> Fresh Fruits
@@ -97,6 +118,7 @@ export default function Marketplace() {
         </div>
       )}
 
+      {/* Bulk Order Form */}
       <div className="mt-16">
         <BulkOrderForm />
       </div>

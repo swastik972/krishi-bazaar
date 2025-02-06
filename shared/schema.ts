@@ -2,38 +2,52 @@ import { pgTable, text, serial, integer, boolean, jsonb } from "drizzle-orm/pg-c
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
+/**
+ * Database schema for products table
+ * Stores information about available produce items
+ */
 export const products = pgTable("products", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
-  category: text("category").notNull(),
+  category: text("category").notNull(), // Either "vegetables" or "fruits"
   description: text("description").notNull(),
   imageUrl: text("image_url").notNull(),
   pricePerKg: integer("price_per_kg").notNull(),
-  minQuantity: integer("min_quantity").notNull(),
+  minQuantity: integer("min_quantity").notNull(), // Minimum order quantity in kg
   available: boolean("available").default(true),
 });
 
+/**
+ * Database schema for bulk orders
+ * Tracks B2B customer orders and requirements
+ */
 export const bulkOrders = pgTable("bulk_orders", {
   id: serial("id").primaryKey(),
   businessName: text("business_name").notNull(),
   contactPerson: text("contact_person").notNull(),
   email: text("email").notNull(),
   phone: text("phone").notNull(),
-  orderType: text("order_type").notNull(),
-  message: text("message"),
-  products: jsonb("products").notNull(),
+  orderType: text("order_type").notNull(), // Type of produce being ordered
+  message: text("message"), // Optional special requirements
+  products: jsonb("products").notNull(), // Array of product IDs and quantities
 });
 
+/**
+ * Database schema for newsletter subscriptions
+ * Manages B2B customer communications
+ */
 export const newsletters = pgTable("newsletters", {
   id: serial("id").primaryKey(),
   email: text("email").notNull().unique(),
   businessName: text("business_name").notNull(),
 });
 
+// Zod schemas for input validation
 export const insertProductSchema = createInsertSchema(products).omit({ id: true });
 export const insertBulkOrderSchema = createInsertSchema(bulkOrders).omit({ id: true });
 export const insertNewsletterSchema = createInsertSchema(newsletters).omit({ id: true });
 
+// TypeScript type definitions
 export type Product = typeof products.$inferSelect;
 export type BulkOrder = typeof bulkOrders.$inferSelect;
 export type Newsletter = typeof newsletters.$inferSelect;
@@ -41,7 +55,10 @@ export type InsertProduct = z.infer<typeof insertProductSchema>;
 export type InsertBulkOrder = z.infer<typeof insertBulkOrderSchema>;
 export type InsertNewsletter = z.infer<typeof insertNewsletterSchema>;
 
-// Mock data
+/**
+ * Mock product data for development and testing
+ * Provides a realistic dataset for the marketplace
+ */
 export const mockProducts: Product[] = [
   {
     id: 1,

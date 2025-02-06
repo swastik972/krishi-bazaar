@@ -10,13 +10,6 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -30,18 +23,25 @@ interface ProductCardProps {
   product: Product;
 }
 
+/**
+ * ProductCard Component
+ * Displays individual product information with interactive quantity selection
+ * and dynamic pricing calculations based on bulk discounts
+ */
 export default function ProductCard({ product }: ProductCardProps) {
+  // State for selected quantity, initialized to product's minimum order quantity
   const [quantity, setQuantity] = useState(product.minQuantity.toString());
   const total = parseInt(quantity) * product.pricePerKg;
 
-  // Calculate bulk pricing tiers
+  // Define bulk pricing tiers with quantity thresholds and discounts
   const tiers = [
-    { quantity: product.minQuantity, discount: 0 },
-    { quantity: product.minQuantity * 5, discount: 5 },
-    { quantity: product.minQuantity * 10, discount: 10 },
-    { quantity: product.minQuantity * 20, discount: 15 },
+    { quantity: product.minQuantity, discount: 0 },      // Base tier
+    { quantity: product.minQuantity * 5, discount: 5 },  // Medium tier (5% off)
+    { quantity: product.minQuantity * 10, discount: 10 }, // Large tier (10% off)
+    { quantity: product.minQuantity * 20, discount: 15 }, // Bulk tier (15% off)
   ];
 
+  // Calculate current pricing tier based on selected quantity
   const currentTier = tiers.reduce((acc, tier) => {
     if (parseInt(quantity) >= tier.quantity) {
       return tier;
@@ -49,9 +49,11 @@ export default function ProductCard({ product }: ProductCardProps) {
     return acc;
   }, tiers[0]);
 
+  // Calculate final price with applied discount
   const discountedPrice = product.pricePerKg * (1 - currentTier.discount / 100);
   const finalTotal = parseInt(quantity) * discountedPrice;
 
+  // Handlers for quantity increment/decrement
   const incrementQuantity = () => {
     const current = parseInt(quantity);
     const nextTier = tiers.find(tier => tier.quantity > current);
@@ -75,6 +77,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       transition={{ duration: 0.2 }}
     >
       <Card className="overflow-hidden transition-all hover:shadow-lg">
+        {/* Product Image Section */}
         <div className="aspect-square overflow-hidden relative">
           <img
             src={product.imageUrl}
@@ -89,6 +92,8 @@ export default function ProductCard({ product }: ProductCardProps) {
             </div>
           )}
         </div>
+
+        {/* Product Information */}
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="text-xl">{product.name}</CardTitle>
@@ -98,8 +103,11 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
           <CardDescription>{product.description}</CardDescription>
         </CardHeader>
+
+        {/* Pricing and Quantity Selection */}
         <CardContent>
           <div className="space-y-4">
+            {/* Base Price Display with Discount Badge */}
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-500">Base price per kg</span>
               <TooltipProvider>
@@ -125,6 +133,8 @@ export default function ProductCard({ product }: ProductCardProps) {
                 </Tooltip>
               </TooltipProvider>
             </div>
+
+            {/* Quantity Selector */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <label className="text-sm text-gray-500">Quantity (kg)</label>
@@ -148,6 +158,8 @@ export default function ProductCard({ product }: ProductCardProps) {
                   </Button>
                 </div>
               </div>
+
+              {/* Progress Bar for Quantity Tiers */}
               <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-green-500 transition-all"
@@ -162,6 +174,8 @@ export default function ProductCard({ product }: ProductCardProps) {
             </div>
           </div>
         </CardContent>
+
+        {/* Total Price and Action Button */}
         <CardFooter className="flex flex-col gap-4">
           <div className="w-full flex justify-between items-center">
             <span className="text-sm font-semibold">Total</span>
