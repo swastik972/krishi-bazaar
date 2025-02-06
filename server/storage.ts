@@ -1,4 +1,4 @@
-import { Product, InsertProduct, BulkOrder, InsertBulkOrder, Newsletter, InsertNewsletter } from "@shared/schema";
+import { Product, InsertProduct, BulkOrder, InsertBulkOrder, Newsletter, InsertNewsletter, mockProducts } from "@shared/schema";
 
 export interface IStorage {
   getProducts(): Promise<Product[]>;
@@ -22,6 +22,14 @@ export class MemStorage implements IStorage {
     this.currentProductId = 1;
     this.currentOrderId = 1;
     this.currentNewsletterId = 1;
+
+    // Initialize with mock products
+    mockProducts.forEach(product => {
+      this.products.set(product.id, product);
+      if (product.id >= this.currentProductId) {
+        this.currentProductId = product.id + 1;
+      }
+    });
   }
 
   async getProducts(): Promise<Product[]> {
@@ -36,7 +44,7 @@ export class MemStorage implements IStorage {
 
   async createBulkOrder(order: InsertBulkOrder): Promise<BulkOrder> {
     const id = this.currentOrderId++;
-    const newOrder = { ...order, id };
+    const newOrder = { ...order, id, message: order.message || null };
     this.orders.set(id, newOrder);
     return newOrder;
   }
