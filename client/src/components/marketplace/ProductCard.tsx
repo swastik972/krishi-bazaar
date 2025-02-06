@@ -23,6 +23,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
+import { Plus, Minus } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface ProductCardProps {
@@ -51,6 +52,22 @@ export default function ProductCard({ product }: ProductCardProps) {
   const discountedPrice = product.pricePerKg * (1 - currentTier.discount / 100);
   const finalTotal = parseInt(quantity) * discountedPrice;
 
+  const incrementQuantity = () => {
+    const current = parseInt(quantity);
+    const nextTier = tiers.find(tier => tier.quantity > current);
+    if (nextTier) {
+      setQuantity(nextTier.quantity.toString());
+    }
+  };
+
+  const decrementQuantity = () => {
+    const current = parseInt(quantity);
+    const prevTier = [...tiers].reverse().find(tier => tier.quantity < current);
+    if (prevTier && prevTier.quantity >= product.minQuantity) {
+      setQuantity(prevTier.quantity.toString());
+    }
+  };
+
   return (
     <motion.div
       whileHover={{ y: -5 }}
@@ -75,7 +92,9 @@ export default function ProductCard({ product }: ProductCardProps) {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="text-xl">{product.name}</CardTitle>
-            <Badge variant="outline">{product.category}</Badge>
+            <Badge variant="outline" className="capitalize">
+              {product.category}
+            </Badge>
           </div>
           <CardDescription>{product.description}</CardDescription>
         </CardHeader>
@@ -107,23 +126,39 @@ export default function ProductCard({ product }: ProductCardProps) {
               </TooltipProvider>
             </div>
             <div className="space-y-2">
-              <label className="text-sm text-gray-500">Quantity (kg)</label>
-              <Select
-                value={quantity}
-                onValueChange={setQuantity}
-                disabled={!product.available}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select quantity" />
-                </SelectTrigger>
-                <SelectContent>
-                  {tiers.map((tier) => (
-                    <SelectItem key={tier.quantity} value={tier.quantity.toString()}>
-                      {tier.quantity} kg {tier.discount > 0 && `(-${tier.discount}%)`}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className="flex items-center justify-between">
+                <label className="text-sm text-gray-500">Quantity (kg)</label>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    disabled={parseInt(quantity) <= product.minQuantity || !product.available}
+                    onClick={decrementQuantity}
+                  >
+                    <Minus className="h-4 w-4" />
+                  </Button>
+                  <span className="w-16 text-center font-medium">{quantity}kg</span>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    disabled={!product.available}
+                    onClick={incrementQuantity}
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+              <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-green-500 transition-all"
+                  style={{
+                    width: `${Math.min(
+                      (parseInt(quantity) / (product.minQuantity * 20)) * 100,
+                      100
+                    )}%`,
+                  }}
+                />
+              </div>
             </div>
           </div>
         </CardContent>
