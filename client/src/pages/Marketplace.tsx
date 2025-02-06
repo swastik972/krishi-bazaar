@@ -3,7 +3,6 @@ import { useState } from "react";
 import { Product } from "@shared/schema";
 import ProductCard from "@/components/marketplace/ProductCard";
 import BulkOrderForm from "@/components/marketplace/BulkOrderForm";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
@@ -16,15 +15,14 @@ import {
 type SortOption = "price-asc" | "price-desc" | "name-asc" | "name-desc";
 
 export default function Marketplace() {
-  const [selectedCategory, setSelectedCategory] = useState("all");
   const [sortBy, setSortBy] = useState<SortOption>("price-asc");
 
-  const { data: products, isLoading } = useQuery<Product[]>({
-    queryKey: [selectedCategory === "all" ? "/api/products" : `/api/products/${selectedCategory}`],
+  const { data: products = [], isLoading } = useQuery<Product[]>({
+    queryKey: ["/api/products"],
   });
 
-  const sortProducts = (products: Product[]) => {
-    return [...products].sort((a, b) => {
+  const sortProducts = (productsToSort: Product[]) => {
+    return [...productsToSort].sort((a, b) => {
       switch (sortBy) {
         case "price-asc":
           return a.pricePerKg - b.pricePerKg;
@@ -40,7 +38,8 @@ export default function Marketplace() {
     });
   };
 
-  const sortedProducts = products ? sortProducts(products) : [];
+  const vegetables = sortProducts(products.filter(p => p.category === "vegetables"));
+  const fruits = sortProducts(products.filter(p => p.category === "fruits"));
 
   return (
     <div className="container py-16">
@@ -52,17 +51,9 @@ export default function Marketplace() {
         </p>
       </div>
 
-      <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
-        <Tabs defaultValue="all" onValueChange={setSelectedCategory} className="w-full md:w-auto">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="all">All</TabsTrigger>
-            <TabsTrigger value="vegetables">Vegetables</TabsTrigger>
-            <TabsTrigger value="fruits">Fruits</TabsTrigger>
-          </TabsList>
-        </Tabs>
-
+      <div className="flex justify-end mb-8">
         <Select value={sortBy} onValueChange={(value) => setSortBy(value as SortOption)}>
-          <SelectTrigger className="w-full md:w-[200px]">
+          <SelectTrigger className="w-[200px]">
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
           <SelectContent>
@@ -81,10 +72,28 @@ export default function Marketplace() {
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {sortedProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+        <div className="space-y-16">
+          <section>
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <span className="text-3xl">🥬</span> Fresh Vegetables
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {vegetables.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <span className="text-3xl">🍎</span> Fresh Fruits
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {fruits.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </section>
         </div>
       )}
 
