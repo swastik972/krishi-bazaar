@@ -55,9 +55,9 @@ export default function Footer() {
           <div>
             <h3 className="font-bold text-lg mb-4">Contact</h3>
             <ul className="space-y-2">
-              <li>Email: info@farmfreshb2b.com</li>
-              <li>Phone: +1 (555) 123-4567</li>
-              <li>Address: 123 Farm Road</li>
+              <li>Email: pantharajan0@gmail.com</li>
+              <li>Phone: +977 9762248648</li>
+              <li>Address: Lokanthali, Bhaktapur</li>
             </ul>
           </div>
 
@@ -112,7 +112,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-8 pt-8 border-t border-white/20 text-center text-sm">
-          <p>&copy; 2024 FarmFresh B2B. All rights reserved.</p>
+          <p>&copy; 2025 Krishi Bazaar. All rights reserved.</p>
         </div>
       </div>
     </footer>

@@ -34,10 +34,10 @@ export default function About() {
   return (
     <div className="container">
       <div className="text-center mb-12">
-        <h2 className="text-3xl font-bold mb-4">Why Choose FarmFresh B2B?</h2>
+        <h2 className="text-3xl font-bold mb-4">Why Choose Krishi Bazaar?</h2>
         <p className="text-gray-600 max-w-2xl mx-auto">
           We're revolutionizing the way businesses source fresh produce by connecting
-          them directly with farmers, ensuring quality and fair pricing.
+          them directly with farmers, ensuring quality and fair pricing, We are also providing essential tools for farmers, seed supply, fertilizer and pesticides supply, and 24/7 support.
         </p>
       </div>
 
@@ -65,8 +65,7 @@ export default function About() {
 
       <div className="mt-16 grid md:grid-cols-2 gap-8 items-center">
         <img
-          src="https://images.unsplash.com/photo-1444653614773-995cb1ef9efa"
-          alt="Farmer and business partnership"
+          src="https://www.adb.org/sites/default/files/content-media/4755-nepals-farmers-cooperative-01.jpg"
           className="rounded-lg shadow-lg"
         />
         <div>
@@ -77,7 +76,7 @@ export default function About() {
             produce, better prices, and sustainable partnerships.
           </p>
           <img
-            src="https://images.unsplash.com/photo-1444653389962-8149286c578a"
+            src="https://english.onlinekhabar.com/wp-content/uploads/2017/01/isard2-768x512.jpg"
             alt="Fresh produce selection"
             className="rounded-lg shadow-lg"
           />

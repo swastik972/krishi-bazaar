@@ -25,7 +25,7 @@ export default function Hero() {
             Direct Farm-Fresh Supply for Your Business
           </h1>
           <p className="text-xl mb-8">
-            Guaranteed Freshness | Wholesale Pricing | Direct from Farmers
+            Guaranteed Freshness | Wholesale Pricing | Direct from Farmers | Business Deals | Essential Tools For Farmars | Seed Supply | Fertilizer and Pestisides Supply | 24/7 Support
           </p>
           <div className="flex gap-4">
             <Link href="/marketplace">
@@ -34,8 +34,8 @@ export default function Hero() {
               </Button>
             </Link>
             <Link href="/contact">
-              <Button size="lg" variant="outline" className="text-white border-white hover:bg-white/20">
-                Get a Quote
+              <Button size="lg" variant="outline" className="bg-[#648c11] hover:bg-[#1B5E20]">
+                Contact Us
               </Button>
             </Link>
           </div>

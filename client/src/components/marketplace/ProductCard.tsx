@@ -114,7 +114,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                 <Tooltip>
                   <TooltipTrigger>
                     <span className="font-bold">
-                      ${product.pricePerKg.toFixed(2)}
+                      ₹{product.pricePerKg.toFixed(2)}
                       {currentTier.discount > 0 && (
                         <Badge variant="secondary" className="ml-2">
                           -{currentTier.discount}%
@@ -180,10 +180,10 @@ export default function ProductCard({ product }: ProductCardProps) {
           <div className="w-full flex justify-between items-center">
             <span className="text-sm font-semibold">Total</span>
             <div className="text-right">
-              <span className="text-lg font-bold">${finalTotal.toFixed(2)}</span>
+              <span className="text-lg font-bold">₹{finalTotal.toFixed(2)}</span>
               {currentTier.discount > 0 && (
                 <div className="text-sm text-gray-500 line-through">
-                  ${total.toFixed(2)}
+                  ₹{total.toFixed(2)}
                 </div>
               )}
             </div>

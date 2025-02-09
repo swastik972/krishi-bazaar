@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import logo from "./logo.png";
 import {
   Sheet,
   SheetContent,
@@ -25,11 +26,11 @@ export default function Header() {
         <Link href="/">
           <a className="flex items-center space-x-2">
             <img
-              src="https://images.unsplash.com/photo-1593741682812-7b2454287961"
+              src={logo}
               alt="Logo"
               className="h-8 w-8 rounded-full object-cover"
             />
-            <span className="font-bold text-xl text-[#2E7D32]">FarmFresh B2B</span>
+            <span className="font-bold text-xl text-[#2E7D32]">Krishi Bazaar</span>
           </a>
         </Link>
 
@@ -45,7 +46,7 @@ export default function Header() {
               </a>
             </Link>
           ))}
-          <Button>Get a Quote</Button>
+          <Button>Get Mentorship</Button>
         </nav>
 
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
