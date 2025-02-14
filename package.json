@@ -1,5 +1,4 @@
 {
-  "homepage": "https://swastik972.github.io/krishi-bazaar",
   "name": "rest-express",
   "version": "1.0.0",
   "type": "module",
@@ -9,9 +8,7 @@
     "build": "vite build",
     "start": "set NODE_ENV=production node dist/index.js",
     "check": "tsc",
-    "db:push": "drizzle-kit push",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "db:push": "drizzle-kit push"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
